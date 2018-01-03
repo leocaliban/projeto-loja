@@ -46,7 +46,7 @@ public class LojaApplication implements CommandLineRunner{
 		SpringApplication.run(LojaApplication.class, args);
 	}
 
-	//Através do CommandLineRunner por padrão será instanciado esses objetos ao iniciar a aplicação
+	//Através do CommandLineRunner, por padrão serão instanciados esses objetos ao iniciar a aplicação
 	@Override
 	public void run(String... arg0) throws Exception {
 		Categoria categoria1 = new Categoria(null, "Informática");
