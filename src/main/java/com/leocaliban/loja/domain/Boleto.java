@@ -2,8 +2,11 @@ package com.leocaliban.loja.domain;
 
 import java.util.Date;
 
+import javax.persistence.Entity;
+
 import com.leocaliban.loja.domain.enums.EstadoPagamento;
 
+@Entity
 public class Boleto extends Pagamento{
 	
 	private static final long serialVersionUID = 1L;

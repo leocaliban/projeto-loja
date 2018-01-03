@@ -1,7 +1,10 @@
 package com.leocaliban.loja.domain;
 
+import javax.persistence.Entity;
+
 import com.leocaliban.loja.domain.enums.EstadoPagamento;
 
+@Entity
 public class CartaoCredito extends Pagamento {
 	
 	private static final long serialVersionUID = 1L;

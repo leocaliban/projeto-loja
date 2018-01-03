@@ -1,5 +1,6 @@
 package com.leocaliban.loja;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,18 +8,25 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.leocaliban.loja.domain.Boleto;
+import com.leocaliban.loja.domain.CartaoCredito;
 import com.leocaliban.loja.domain.Categoria;
 import com.leocaliban.loja.domain.Cidade;
 import com.leocaliban.loja.domain.Cliente;
 import com.leocaliban.loja.domain.Endereco;
 import com.leocaliban.loja.domain.Estado;
+import com.leocaliban.loja.domain.Pagamento;
+import com.leocaliban.loja.domain.Pedido;
 import com.leocaliban.loja.domain.Produto;
+import com.leocaliban.loja.domain.enums.EstadoPagamento;
 import com.leocaliban.loja.domain.enums.TipoCliente;
 import com.leocaliban.loja.repositories.CategoriaRepository;
 import com.leocaliban.loja.repositories.CidadeRepository;
 import com.leocaliban.loja.repositories.ClienteRepository;
 import com.leocaliban.loja.repositories.EnderecoRepository;
 import com.leocaliban.loja.repositories.EstadoRepository;
+import com.leocaliban.loja.repositories.PagamentoRepository;
+import com.leocaliban.loja.repositories.PedidoRepository;
 import com.leocaliban.loja.repositories.ProdutoRepository;
 
 @SpringBootApplication
@@ -41,6 +49,12 @@ public class LojaApplication implements CommandLineRunner{
 	
 	@Autowired
 	private EnderecoRepository enderecoRepository;
+	
+	@Autowired
+	private PedidoRepository pedidoRepository;
+	
+	@Autowired
+	private PagamentoRepository pagamentoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(LojaApplication.class, args);
@@ -94,6 +108,21 @@ public class LojaApplication implements CommandLineRunner{
 		clienteRepository.save(Arrays.asList(cliente1));
 		enderecoRepository.save(Arrays.asList(endereco1, endereco2));
 		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+		
+		Pedido pedido1 = new Pedido(null, sdf.parse("30/09/2017 09:30"), cliente1, endereco1);
+		Pedido pedido2 = new Pedido(null, sdf.parse("10/12/2017 12:28"), cliente1, endereco2);
+		
+		Pagamento pagamento1 = new CartaoCredito(null, EstadoPagamento.QUITADO, pedido1, 6);
+		pedido1.setPagamento(pagamento1);
+		
+		Pagamento pagamento2 = new Boleto(null, EstadoPagamento.PENDENTE, pedido2, sdf.parse("20/10/2017 00:00"), null);
+		pedido2.setPagamento(pagamento2);
+		
+		cliente1.getPedidos().addAll(Arrays.asList(pedido1, pedido2));
+		
+		pedidoRepository.save(Arrays.asList(pedido1, pedido2));
+		pagamentoRepository.save(Arrays.asList(pagamento1, pagamento2));
 
 	}
 }
