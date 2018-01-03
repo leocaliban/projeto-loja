@@ -15,6 +15,7 @@ import com.leocaliban.loja.domain.Cidade;
 import com.leocaliban.loja.domain.Cliente;
 import com.leocaliban.loja.domain.Endereco;
 import com.leocaliban.loja.domain.Estado;
+import com.leocaliban.loja.domain.ItemPedido;
 import com.leocaliban.loja.domain.Pagamento;
 import com.leocaliban.loja.domain.Pedido;
 import com.leocaliban.loja.domain.Produto;
@@ -25,6 +26,7 @@ import com.leocaliban.loja.repositories.CidadeRepository;
 import com.leocaliban.loja.repositories.ClienteRepository;
 import com.leocaliban.loja.repositories.EnderecoRepository;
 import com.leocaliban.loja.repositories.EstadoRepository;
+import com.leocaliban.loja.repositories.ItemPedidoRepository;
 import com.leocaliban.loja.repositories.PagamentoRepository;
 import com.leocaliban.loja.repositories.PedidoRepository;
 import com.leocaliban.loja.repositories.ProdutoRepository;
@@ -55,6 +57,9 @@ public class LojaApplication implements CommandLineRunner{
 	
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
+	
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(LojaApplication.class, args);
@@ -123,6 +128,19 @@ public class LojaApplication implements CommandLineRunner{
 		
 		pedidoRepository.save(Arrays.asList(pedido1, pedido2));
 		pagamentoRepository.save(Arrays.asList(pagamento1, pagamento2));
+		
+		ItemPedido item1 = new ItemPedido(pedido1, produto1, 0.00, 1, 3500.00);
+		ItemPedido item2 = new ItemPedido(pedido1, produto5, 0.00, 1, 16.00);
+		ItemPedido item3 = new ItemPedido(pedido2, produto4, 0.00, 1, 890.00);
+		
+		pedido1.getItens().addAll(Arrays.asList(item1, item2));
+		pedido2.getItens().addAll(Arrays.asList(item3));
+		
+		produto1.getItens().addAll(Arrays.asList(item1));
+		produto5.getItens().addAll(Arrays.asList(item2));
+		produto4.getItens().addAll(Arrays.asList(item3));
+		
+		itemPedidoRepository.save(Arrays.asList(item1, item2, item3));
 
 	}
 }
